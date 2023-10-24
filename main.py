@@ -1,23 +1,28 @@
 from program import handle_request
 from application.converter_controller import ConverterController
 from application.file_controller import FileController
+from application.generator_controller import GeneratorController
 from core.converter_service import ConverterService
 from core.file_service import FileService
+from core.generator_service import GeneratorService
 import os
 
 def main():
-    converter_service=ConverterService()
     file_service=FileService()
+    converter_service=ConverterService()
+    generator_service=GeneratorService()
 
-    converter_controller=ConverterController(converter_service)
     file_controller=FileController(file_service)
+    converter_controller=ConverterController(converter_service)
+    generator_controller=GeneratorController(generator_service)
     
     while True:
         print("Choose an action:")
         print("1. Convert XML to Dictionary")
         print("2. Convert XML file to Dictionary")
         print("3. List Files in Directory")
-        print("4. Exit")
+        print("4. Generate .lis File")
+        print("0. Exit")
         choice=input("Enter your choice: ")
 
         if choice=="1":
@@ -42,6 +47,12 @@ def main():
             for file in files:
                 print(file)
         elif choice=="4":
+            xml_file_path=input("Locate the xml file: ")
+            xml_dict = xml_file_path
+            lis_file_path=input("Enter the path for the .lis file: ")
+            generator_controller.generate_lis_file(xml_dict,lis_file_path)
+            print(f".lis file generated at {lis_file_path}")
+        elif choice=="0":
             print("Exiting the application.")
             break
         else:
